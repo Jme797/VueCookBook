@@ -3,7 +3,7 @@
     <h1>My Recipe Book</h1>
     <ul>
       <li v-for="i in links" :key="i.name">
-        <button @click="this.$emit('change-page', i.name)">{{ i.name }}</button>
+        <router-link :to="i.link">{{ i.name }}</router-link>
       </li>
     </ul>
   </nav>
@@ -16,11 +16,11 @@ export default {
       links: [
         {
           name: 'View Recipes',
-          link: '#',
+          link: '/Recipes',
         },
         {
           name: 'Add Recipe',
-          link: '#',
+          link: '/addRecipe',
         },
       ],
     };
@@ -69,5 +69,8 @@ button {
 }
 button:hover {
   color: rgb(61, 22, 22);
+}
+.router-link-active {
+  color: rgb(0, 0, 0);
 }
 </style>

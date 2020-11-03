@@ -1,51 +1,19 @@
 <template>
-  <NavBar @changePage="changeActivePage" />
-  <page-container flex="true" v-if="this.activePage == 'View Recipes' && !fullRecipe">
-    <RecipeList
-      v-for="i in recipes"
-      :key="i.id"
-      :id="i.id"
-      :name="i.name"
-      :description="i.desc"
-      :imageURL="i.imageName"
-      linkURL="#"
-      @showFullRecipeFor="showFullRecipe"
-    />
-  </page-container>
-  <page-container v-if="fullRecipe">
-    <ViewFullRecipe
-      :id="selectedRecipe.id"
-      :name="selectedRecipe.name"
-      :desc="selectedRecipe.desc"
-      :imageName="selectedRecipe.imageName"
-      :steps="selectedRecipe.steps"
-      :ingredients="selectedRecipe.ingredients"
-      @backToAllRecipes="showAllRecipes"
-    />
-  </page-container>
-  <page-container v-if="this.activePage == 'Add Recipe'">
-    <AddRecipeForm @SaveRecipe="saveRecipe" />
+  <NavBar />
+  <page-container>
+    <router-view @save-recipe="saveRecipe"></router-view>
   </page-container>
 </template>
 
 <script>
 import NavBar from './components/nav/NavBar.vue';
-import RecipeList from './components/RecipeList.vue';
-import AddRecipeForm from './components/AddRecipeForm.vue';
-import ViewFullRecipe from './components/ViewFullRecipe.vue';
 
 export default {
   components: {
     NavBar,
-    RecipeList,
-    AddRecipeForm,
-    ViewFullRecipe,
   },
   data() {
     return {
-      activePage: 'View Recipes',
-      fullRecipe: false,
-      selectedRecipe: {},
       recipes: [
         {
           id: 1,
@@ -82,14 +50,14 @@ export default {
       ],
     };
   },
+  provide() {
+    return {
+      recipes: this.recipes,
+    };
+  },
   methods: {
-    changeActivePage(page) {
-      this.activePage = page;
-      this.fullRecipe = false;
-    },
     saveRecipe(n, i, s, d) {
       const newId = new Date().toISOString();
-      this.activePage = 'View Recipes';
       this.recipes.push({
         id: newId,
         name: n,
@@ -98,14 +66,6 @@ export default {
         steps: s,
         ingredients: i,
       });
-    },
-    showFullRecipe(id) {
-      const index = this.recipes.findIndex(element => element.id == id);
-      this.selectedRecipe = this.recipes[index];
-      this.fullRecipe = true;
-    },
-    showAllRecipes() {
-      this.fullRecipe = false;
     },
   },
 };
@@ -140,8 +100,10 @@ button {
   padding: 8px 36px;
   margin: 4px;
   background-color: rgb(252, 206, 206);
+  text-decoration: none !important;
 }
-button:hover {
+button:hover,
+.buttonColor:hover {
   color: rgb(124, 124, 124);
 }
 .buttonRight {

@@ -1,21 +1,20 @@
 <template>
-  <div>
-    <base-cards>
+  <div class="flex">
+    <base-cards v-for="i in recipes" :key="i.id">
       <template #img>
-        <img :src="require('@/assets/images/' + imageURL + '')" />
+        <img :src="require('@/assets/images/' + i.imageName + '')" />
       </template>
       <template #text>
-        <h3>{{ name }}</h3>
-        <p>{{ description }}</p>
-        <button @click="this.$emit('show-full-recipe-for', id)">See full recipe</button>
+        <h3>{{ i.name }}</h3>
+        <p>{{ i.desc }}</p>
+        <router-link :to="'/Recipes/' + i.id">See full recipe</router-link>
       </template>
     </base-cards>
   </div>
 </template>
-
 <script>
 export default {
-  props: ['id', 'imageURL', 'name', 'description', 'linkURL'],
+  inject: ['recipes'],
 };
 </script>
 
@@ -34,5 +33,11 @@ h3 {
 }
 p {
   padding-left: 2px;
+}
+.flex {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  width: 100%;
 }
 </style>
