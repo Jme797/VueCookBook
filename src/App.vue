@@ -15,17 +15,19 @@ export default {
   data() {
     return {
       recipes: [],
+      apiURL: 'http://localhost/php-cook-book/',
     };
   },
   provide() {
     return {
       recipes: this.recipes,
       imageURL: 'http://localhost/php-cook-book/imageUploads/',
+      apiURL: 'http://localhost/php-cook-book/',
     };
   },
   methods: {
-    async updateData() {
-      fetch('http://localhost/php-cook-book/getRecipes.php', {
+    updateData() {
+      fetch(this.apiURL + 'getRecipes.php', {
         method: 'GET',
       })
         .then(response => response.json())

@@ -39,6 +39,7 @@
 
 <script>
 export default {
+  inject: ['apiURL'],
   data() {
     return {
       currentInput: '',
@@ -54,18 +55,6 @@ export default {
     };
   },
   methods: {
-    /*     click() {
-      fetch('http://localhost/php-cook-book/saveData.php', {
-        method: 'GET',
-      })
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }, */
     submitInput() {
       if (this.currentStep == 'Title/Name' && this.currentInput != '') {
         this.title = this.currentInput;
@@ -148,7 +137,7 @@ export default {
       formData.append('file', image, image.name);
       formData.append('data', JsonRecipe);
 
-      fetch('http://localhost/php-cook-book/saveData.php', {
+      fetch(this.apiURL + 'saveData.php', {
         method: 'POST',
         body: formData,
       })
