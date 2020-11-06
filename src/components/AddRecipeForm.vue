@@ -3,11 +3,12 @@
     <form @submit.prevent="submitInput" v-if="showForm">
       <label>{{ currentStep }}</label>
       <input type="text" v-model.trim="currentInput" />
-      <!-- <input id="fileUpload" type="file" class="fileInput" /> -->
+      <input id="fileUpload" type="file" class="fileInput" />
       <button type="submit">Add</button
       ><button @click="nextStep" class="buttonColor">Next Step</button>
       <button @click="saveRecipe">Save Recipe</button>
     </form>
+    <button @click="click">Click Me</button>
 
     <h1>{{ title }} <button @click="toggleEditTitle">Edit</button></h1>
     <p>{{ description }} <button @click="toggleEditDesc">Edit</button></p>
@@ -53,6 +54,18 @@ export default {
     };
   },
   methods: {
+    /*     click() {
+      fetch('http://localhost/php-cook-book/saveData.php', {
+        method: 'GET',
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }, */
     submitInput() {
       if (this.currentStep == 'Title/Name' && this.currentInput != '') {
         this.title = this.currentInput;
@@ -118,25 +131,14 @@ export default {
       this.currentStep = 'Title/Name';
     },
     saveRecipe() {
-      this.$emit('save-recipe', this.title, this.ingredients, this.method, this.description);
-      this.currentInput = '';
-      this.currentStep = 'Title/Name';
-      this.title = 'Edit Title';
-      this.description = '';
-      this.ingredients = [];
-      this.method = [];
-      this.showForm = true;
-      this.editIngredients = false;
-      this.editMethod = false;
-      this.editDesc = false;
-
-      /*       let file = document.getElementById('fileUpload');
+      let file = document.getElementById('fileUpload');
       let files = file.files;
       let formData = new FormData();
       let image = files[0];
 
       let recipe = {
         name: this.title,
+        desc: this.description,
         ingredients: this.ingredients,
         method: this.method,
       };
@@ -146,17 +148,28 @@ export default {
       formData.append('file', image, image.name);
       formData.append('data', JsonRecipe);
 
-      fetch('@/src/assets/scripts/saveRecipe.php', {
+      fetch('http://localhost/php-cook-book/saveData.php', {
         method: 'POST',
         body: formData,
       })
         .then(response => response.json())
         .then(data => {
+          this.currentStep = 'Title/Name';
+          this.title = 'Edit Title';
+          this.description = '';
+          this.ingredients = [];
+          this.method = [];
+          this.showForm = true;
+          this.editIngredients = false;
+          this.editMethod = false;
+          this.editDesc = false;
           console.log(data);
+          this.$router.push('/Recipes');
         })
         .catch(error => {
           console.log(error);
-        }); */
+        });
+      this.currentInput = '';
     },
   },
 };

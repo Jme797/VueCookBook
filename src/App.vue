@@ -1,7 +1,7 @@
 <template>
   <NavBar />
   <page-container>
-    <router-view @save-recipe="saveRecipe"></router-view>
+    <router-view></router-view>
   </page-container>
 </template>
 
@@ -14,59 +14,40 @@ export default {
   },
   data() {
     return {
-      recipes: [
-        {
-          id: 1,
-          name: 'lasange',
-          desc: 'An amazing food item, highly recommended',
-          imageName: 'lasange.png',
-          steps: ['prepare', 'cook', 'eat'],
-          ingredients: ['sauce', 'cheese', 'beef'],
-        },
-        {
-          id: 2,
-          name: 'Pasta',
-          desc: 'An amazing food item, highly recommended',
-          imageName: 'lasange.png',
-          steps: ['prepare', 'cook', 'eat'],
-          ingredients: ['sauce', 'cheese', 'beef'],
-        },
-        {
-          id: 3,
-          name: 'Fajitas',
-          desc: 'An amazing food item, highly recommended',
-          imageName: 'lasange.png',
-          steps: ['prepare', 'cook', 'eat'],
-          ingredients: ['sauce', 'cheese', 'beef'],
-        },
-        {
-          id: 4,
-          name: 'Pie',
-          desc: 'An amazing food item, highly recommended',
-          imageName: 'lasange.png',
-          steps: ['prepare', 'cook', 'eat'],
-          ingredients: ['sauce', 'cheese', 'beef'],
-        },
-      ],
+      recipes: [],
     };
   },
   provide() {
     return {
       recipes: this.recipes,
+      imageURL: 'http://localhost/php-cook-book/imageUploads/',
     };
   },
   methods: {
-    saveRecipe(n, i, s, d) {
-      const newId = new Date().toISOString();
-      this.recipes.push({
-        id: newId,
-        name: n,
-        desc: d,
-        imageName: 'lasange.png',
-        steps: s,
-        ingredients: i,
-      });
+    async updateData() {
+      fetch('http://localhost/php-cook-book/getRecipes.php', {
+        method: 'GET',
+      })
+        .then(response => response.json())
+        .then(data => {
+          for (let i = 0; i < data.length; i++) {
+            this.recipes.push({
+              id: data[i]['id'],
+              name: data[i]['name'],
+              desc: data[i]['description'],
+              imageName: data[i]['imageName'],
+              steps: JSON.parse(data[i]['steps']),
+              ingredients: JSON.parse(data[i]['ingredients']),
+            });
+          }
+        })
+        .catch((/* error */) => {
+          console.log('error loading data');
+        });
     },
+  },
+  created: function() {
+    this.updateData();
   },
 };
 </script>

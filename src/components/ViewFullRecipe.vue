@@ -1,7 +1,12 @@
 <template>
-  <page-container class="background">
+  <translation>
+    <div class="spinnerContainer">
+      <img v-if="loading" class="spinner" src="../assets/images/spinner.png" />
+    </div>
+  </translation>
+  <page-container class="background" v-if="!loading">
     <h1>{{ selectedRecipe.name }}</h1>
-    <p>{{ selectedRecipe.desc }}</p>
+    <p>{{ selectedRecipe.description }}</p>
     <h2>Ingredients</h2>
     <div>
       <ul>
@@ -39,12 +44,22 @@ export default {
   data() {
     return {
       selectedRecipe: {},
+      loading: true,
     };
   },
-  created() {
+  created: function() {
     const recipeId = this.$route.params.recipeId;
-    const recipe = this.recipes.find(recipe => recipe.id == recipeId);
+    let recipe = this.recipes.find(recipe => recipe.id == recipeId);
     this.selectedRecipe = recipe;
+    if (recipe == undefined) {
+      setTimeout(() => {
+        recipe = this.recipes.find(recipe => recipe.id == recipeId);
+        this.selectedRecipe = recipe;
+        this.loading = false;
+      }, 1000);
+    } else {
+      this.loading = false;
+    }
   },
 };
 </script>
@@ -74,5 +89,33 @@ p {
   background-color: rgb(224, 255, 242);
   border-radius: 9px;
   box-shadow: 2px 4px 10px slategray;
+  padding-bottom: 50px;
+}
+.buttonRight {
+  padding-top: 30px;
+}
+.spinnerContainer {
+  text-align: center;
+  width: 100%;
+}
+.spinner {
+  margin: 0 auto;
+  width: 300px;
+  animation: spin 8s ease-out;
+  margin-top: 50px;
+  opacity: 0.8;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg) scale(1);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: rotate(360deg) scale(0.5);
+  }
+  100% {
+    transform: rotate(720deg) scale(1);
+  }
 }
 </style>

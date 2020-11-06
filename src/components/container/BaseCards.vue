@@ -1,5 +1,6 @@
 <template>
   <section>
+    <slot name="img"></slot>
     <div class="paddBody">
       <slot name="text"></slot>
     </div>
@@ -18,6 +19,7 @@ section {
   border-radius: 5px;
   padding: 0;
   overflow: hidden;
+  height: 560px;
 }
 section:hover {
   box-shadow: 2px 2px 12px rgb(77, 77, 77);
@@ -28,9 +30,5 @@ section:hover {
   box-sizing: border-box;
   width: 100%;
   text-align: center;
-}
-.imgPlaceholder {
-  width: 320px;
-  height: 350px;
 }
 </style>
